@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constellation Protocol Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <span class="icon">✨</span>
+            <h1>Constellation <span>Protocol</span></h1>
+        </div>
+        <div class="status-indicator">
+            <div class="pulse"></div>
+            <span>Network Online</span>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <section class="panel left-panel">
+            <div class="panel-header">
+                <h2>Waiting Pool</h2>
+                <span class="badge" id="waiting-count">0</span>
+            </div>
+            <div class="node-list" id="waiting-nodes-list">
+                <!-- Nodes will be injected here -->
+                <div class="empty-state">No nodes waiting for fusion</div>
+            </div>
+        </section>
+
+        <section class="panel center-panel">
+            <div class="visualizer-container">
+                <div class="globe-placeholder">
+                    <div class="radar-sweep"></div>
+                    <div class="globe-center">
+                        <span class="core-icon">⚛️</span>
+                    </div>
+                    <div id="fusion-flash" class="fusion-flash"></div>
+                </div>
+                <div class="metrics">
+                    <div class="metric">
+                        <span class="label">Active Regions</span>
+                        <span class="value" id="active-regions-count">0</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Total Fusions</span>
+                        <span class="value" id="total-fusions-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel right-panel">
+            <div class="panel-header">
+                <h2>Fusion Event Log</h2>
+            </div>
+            <div class="fusion-log" id="fusion-history-list">
+                <!-- Fusions will be injected here -->
+                <div class="empty-state">Awaiting first successful fusion...</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

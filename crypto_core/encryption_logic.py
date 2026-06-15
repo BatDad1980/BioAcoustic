@@ -1,10 +1,13 @@
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA3_256
-import os
 
 def generate_bio_key(hash_a, hash_b):
     """
-    Fuses two node hashes using XOR to create the 256-bit Master Key.
+    Demonstration key-material derivation from two node hashes.
+
+    Boundary: this prototype models the shape of the BioAcoustic
+    Constellation flow. It is not a production KDF and should not be used
+    for real secrets without formal cryptographic review.
     """
     # Convert hex strings to bytes
     bytes_a = bytes.fromhex(hash_a)
@@ -13,7 +16,7 @@ def generate_bio_key(hash_a, hash_b):
     # bitwise XOR the two nodes
     fused_seed = bytes(a ^ b for a, b in zip(bytes_a, bytes_b))
     
-    # Run through SHA3 one last time to ensure a perfect 256-bit key
+    # Re-hash the fused bytes into a fixed-width AES-256-GCM demo key.
     return SHA3_256.new(fused_seed).digest()
 
 def encrypt_data(plain_text, key):
@@ -77,7 +80,7 @@ if __name__ == "__main__":
     decrypted_message = decrypt_data(payload, master_key)
     print(f"\nDecrypted Message: '{decrypted_message}'")
     
-    # 4. Demonstrate Tamper-Proofing (Optional)
+    # 4. Demonstrate authenticated tamper detection (Optional)
     # If we alter even one character of the ciphertext, decryption will fail
     tampered_payload = payload.copy()
     tampered_payload["ciphertext"] = "00" + tampered_payload["ciphertext"][2:]

@@ -139,9 +139,9 @@ async fn main() -> Result<()> {
 
         if current_entropy < 3.5 {
             println!("    -> [WARNING] STORM-GUARD TRIGGERED! Entropy critically low (possible spoofing, silent mic, or hardware failure).");
-            println!("    -> [FAIL-SAFE] Pivoting to Hardware TRNG Fallback...");
+            println!("    -> [FAIL-SAFE] Pivoting to local fallback entropy for prototype continuity...");
             
-            // Generate raw entropy simulating a hardware TRNG
+            // Prototype fallback only. Production deployments need a real OS/HSM/TRNG source.
             let time_bytes = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().subsec_nanos().to_le_bytes();
             let mut hasher = Keccak256::new();
             hasher.update(&time_bytes);

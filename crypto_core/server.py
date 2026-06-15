@@ -3,11 +3,17 @@ from flask_cors import CORS
 from encryption_logic import generate_bio_key, encrypt_data
 import time
 import sqlite3
+import string
 
 app = Flask(__name__)
 CORS(app)
 
 DB_FILE = "constellation.db"
+HEX_CHARS = set(string.hexdigits)
+
+
+def is_sha3_hex(value):
+    return isinstance(value, str) and len(value) == 64 and all(ch in HEX_CHARS for ch in value)
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
@@ -18,7 +24,7 @@ def init_db():
                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                   node_1 TEXT, region_1 TEXT, 
                   node_2 TEXT, region_2 TEXT, 
-                  master_key_preview TEXT, timestamp REAL)''')
+                  proof_preview TEXT, timestamp REAL)''')
     conn.commit()
     conn.close()
 
@@ -33,6 +39,9 @@ def receive_node_hash():
     
     if not node_id or not node_hash:
         return jsonify({"error": "Missing node_id or node_hash"}), 400
+
+    if not is_sha3_hex(node_hash):
+        return jsonify({"error": "node_hash must be a 64-character hex digest"}), 400
         
     print(f"\n[+] [Region: {region}] Received Hash from {node_id}: {node_hash[:16]}...")
     
@@ -54,19 +63,19 @@ def receive_node_hash():
         
         # 1. XOR Fusion
         master_key = generate_bio_key(node_hash, partner_hash)
-        print("[*] 256-bit Master Key generated successfully via XOR Fusion.")
+        print("[*] Demo key material derived via prototype hash fusion.")
         
         # 2. Encrypt dummy data
         payload = encrypt_data("Constellation Protocol Sequence Complete", master_key)
-        key_preview = payload['ciphertext'][:16]
-        print(f"[*] Secured Payload: {key_preview}...")
+        proof_preview = payload['ciphertext'][:16]
+        print(f"[*] Secured payload proof preview: {proof_preview}...")
         
         # Log fusion to DB
         timestamp = time.time()
         c.execute('''INSERT INTO fusions 
-                     (node_1, region_1, node_2, region_2, master_key_preview, timestamp)
+                     (node_1, region_1, node_2, region_2, proof_preview, timestamp)
                      VALUES (?, ?, ?, ?, ?, ?)''',
-                  (node_id, region, fusion_partner_id, partner_region, key_preview, timestamp))
+                  (node_id, region, fusion_partner_id, partner_region, proof_preview, timestamp))
         conn.commit()
         conn.close()
 
@@ -105,7 +114,7 @@ def network_status():
             "waiting_since": ts
         })
         
-    c.execute("SELECT node_1, region_1, node_2, region_2, master_key_preview, timestamp FROM fusions ORDER BY timestamp DESC LIMIT 20")
+    c.execute("SELECT node_1, region_1, node_2, region_2, proof_preview, timestamp FROM fusions ORDER BY timestamp DESC LIMIT 20")
     recent_fusions = []
     for row in c.fetchall():
         recent_fusions.append({
@@ -113,7 +122,7 @@ def network_status():
             "region_1": row[1],
             "node_2": row[2],
             "region_2": row[3],
-            "master_key_preview": row[4],
+            "proof_preview": row[4],
             "timestamp": row[5]
         })
         

@@ -68,7 +68,7 @@ function updateDashboard(data) {
                         <span class="fusion-arrow">⤫</span>
                         <span>${fusion.node_2.split('_')[0]}_${fusion.node_2.split('_')[1]}</span>
                     </div>
-                    <div class="master-key">🔑 ${fusion.master_key_preview}...</div>
+                    <div class="master-key">Proof: ${fusion.proof_preview}...</div>
                 </div>
             `;
         }).join('');

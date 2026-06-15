@@ -43,6 +43,10 @@ Thumbs.db
 # Large Exports
 *.zip
 *.tar.gz
+*.mp4
+*.mov
+*.avi
+*.exe
 BioAcoustic_Export.zip
 
 # Node/JS (if any)

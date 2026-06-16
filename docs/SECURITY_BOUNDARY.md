@@ -8,6 +8,12 @@ This document defines what the BioAcoustic / BACL prototype currently demonstrat
 
 The repository demonstrates:
 
+- canonical evidence manifests;
+- stable manifest digests;
+- local prototype signed-authority checks;
+- fail-closed handling for missing, invalid, unknown, revoked, or replayed authority;
+- append-only ledger events;
+- tamper-evident ledger verification;
 - local edge-node entropy capture shape;
 - Shannon entropy estimation over audio sample bytes;
 - hash generation from local entropy material;
@@ -77,4 +83,3 @@ BioAcoustic/BACL is strongest today as supporting infrastructure for:
 - HQA authority gates;
 - Forensic Audio evidence packaging;
 - HPPW replay packet integrity.
-

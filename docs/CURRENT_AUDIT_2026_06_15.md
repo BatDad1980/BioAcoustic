@@ -8,6 +8,12 @@ BioAcoustic is a coherent early BACL prototype. It has a working local architect
 
 ## What Is Real
 
+- Clean-room BACL core unit tests pass.
+- BACL Core Evidence Gate V0 passes 7/7 checks.
+- Canonical evidence manifests produce stable digests.
+- Signed authority is valid once and replay-locked after use.
+- Missing, invalid, unknown, revoked, or replayed authority safe-holds or locks.
+- Append-only ledger verification detects tampered manifests.
 - Python AES-GCM demo runs successfully.
 - Tampered ciphertext fails authentication.
 - Rust edge node compiles with `cargo check`.
@@ -20,6 +26,8 @@ BioAcoustic is a coherent early BACL prototype. It has a working local architect
 Commands run:
 
 ```powershell
+python -m unittest discover -s .\tests -v
+python .\tools\run_bacl_core_gate.py
 python -m py_compile .\crypto_core\encryption_logic.py .\crypto_core\server.py .\edge_node\simulate_node_b.py
 python .\crypto_core\encryption_logic.py
 cd .\edge_node
@@ -28,6 +36,8 @@ cargo check
 
 Result:
 
+- BACL core tests: PASS, 6/6
+- BACL core evidence gate: PASS, 7/7
 - Python compile: PASS
 - AES-GCM round trip: PASS
 - Tamper authentication failure: PASS
@@ -36,6 +46,10 @@ Result:
 
 ## Strongest Architecture Elements
 
+- canonical manifest / digest discipline;
+- fail-closed authority semantics;
+- replay and revoked-key blocking;
+- tamper-evident ledger verification;
 - local/offline first shape;
 - environmental entropy observation;
 - cross-node pairing concept;
@@ -73,4 +87,3 @@ Result:
 ## RTI-Safe Position
 
 BioAcoustic/BACL is a supporting security and evidence-integrity asset. Its current value is not a claim of unbreakable natural-sound encryption. Its current value is a direction for fail-closed authority, tamper-evident provenance, local/offline evidence handling, and experimental entropy-source modeling.
-
